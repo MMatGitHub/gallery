@@ -1,57 +1,122 @@
- <html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<style>
-div.gallery {
-  margin: 5px;
-  border: 1px solid #ccc;
-  float: left;
-  width: 180px;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fancy Image Gallery</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      color: #333;
+    }
+    
+    #gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 60px; /* Adjusted margin to be below the button */
+    }
 
-div.gallery:hover {
-  border: 1px solid #777;
-}
+    .thumbnail {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.3s;
+      border: 5px solid #fff;
+      border-radius: 10px;
+    }
 
-div.gallery img {
-  width: 100%;
-  height: auto;
-}
+    .thumbnail:hover {
+      transform: scale(1.5);
+    }
 
-div.desc {
-  padding: 15px;
-  text-align: center;
-}
-</style>
+    #loadMore {
+      padding: 10px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+    }
+
+    #loadMore:hover {
+      background-color: #2980b9;
+    }
+    #toast {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background-color: #e74c3c;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      display: block;
+    }
+    </style>
 </head>
 <body>
 
-<div class="gallery">
-  <a target="_blank" href="ich.jpg">
-    <img src="ich.jpg" alt="Cinque Terre" width="600" height="400">
-  </a>
-  <div class="desc">ich in space</div>
-</div>
+<div id="gallery"></div>
+<button id="loadMore">Load Next Images</button>
+<div id="toast"></div>
 
-<div class="gallery">
-  <a target="_blank" href="du.jpg">
-    <img src="du.jpg" alt="Forest" width="600" height="400">
-  </a>
-  <div class="desc">du in space</div>
-</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const gallery = document.getElementById('gallery');
+  const loadMoreButton = document.getElementById('loadMore');
+  const toast = document.getElementById('toast');
+  let startIndex = 0;
+  
+  function showToast(message, farbe) {
+    toast.textContent = message;
+    toast.style.display = 'block';
+    toast.style.backgroundColor = farbe;
 
-<div class="gallery">
-  <a target="_blank" href="er.jpg">
-    <img src="er.jpg" alt="Northern Lights" width="600" height="400">
-  </a>
-  <div class="desc">er in space</div>
-</div>
+    setTimeout(() => {
+      toast.style.display = 'none';
+    }, 2000);
+  }
 
-<div class="gallery">
-  <a target="_blank" href="sie.jpg">
-    <img src="sie.jpg" alt="Mountains" width="600" height="400">
-  </a>
-  <div class="desc">sie</div>
-</div>
+  function loadImages(startIndex, endIndex) {
+    var feedback_msg = 'loaded successfully :-)'
+    var feedback_color = '#29b929';
+    for (let i = startIndex; i < endIndex; i++) {
+      const img = new Image();
+      img.src = `images/${i + 1}.jpg`;
+      if (img.width === 0 || img.height === 0) {
+            console.error(`Image not loaded: ${i + 1}.jpg`);
+            feedback_msg='Some Image not loaded'
+            feedback_color = "#e74c3c"
+      } else {
+        img.classList.add('thumbnail');
+        img.addEventListener('click', () => openImage(img.src));
+        gallery.appendChild(img);
+      }
+    }
+    showToast(feedback_msg, feedback_color);
+  }
+
+  function openImage(imageSrc) {
+    window.open(imageSrc, '_blank');
+  }
+  const wieviele = 2;
+  loadImages(startIndex, startIndex + wieviele);
+
+  loadMoreButton.addEventListener('click', function() {
+    startIndex += wieviele;
+    let endIndex = startIndex + wieviele;
+    loadImages(startIndex, startIndex + wieviele);
+    startIndex = endIndex;
+  });
+});
+</script>
 
 </body>
-</html> 
+</html>

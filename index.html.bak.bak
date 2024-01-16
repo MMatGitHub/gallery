@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Gallery</title>
+  <style>
+    #gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .thumbnail {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div id="gallery"></div>
+<button id="loadMore">Load Next Images</button>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const gallery = document.getElementById('gallery');
+  const loadMoreButton = document.getElementById('loadMore');
+  let startIndex = 0;
+
+  function loadImages(startIndex, endIndex) {
+        for (let i = startIndex; i < endIndex; i++) {
+            const img = new Image();
+            img.src = `${i + 1}.jpg`; 
+            img.classList.add('thumbnail');
+            img.addEventListener('click', () => openImage(images[i]));
+            gallery.appendChild(img);
+        }
+    }
+
+  function openImage(image) {
+    // You can implement the logic to open the image here
+    console.log(`Open image: ${image}`);
+  }
+
+  loadImages(startIndex, startIndex + 10);
+
+  loadMoreButton.addEventListener('click', function() {
+    startIndex += 10;
+    loadImages(startIndex, startIndex + 10);
+  });
+});
+</script>
+
+</body>
+</html>
