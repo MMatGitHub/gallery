@@ -79,6 +79,9 @@ document.addEventListener("DOMContentLoaded", function() {
   const gallery = document.getElementById('gallery');
   const loadMoreButton = document.getElementById('loadMore');
   const toast = document.getElementById('toast');
+ 
+  const githubImageUrl = 'https://raw.githubusercontent.com/mmatgithub/gallery/main/images/';
+
   let startIndex = 0;
   
  // Hardcoded image filenames array
@@ -107,13 +110,15 @@ document.addEventListener("DOMContentLoaded", function() {
       img.src = `./images/${i + 1}.jpg`;
       //img.src = `images/${imageFiles[i]}`; // Assuming the images are in the 'images' folder
       if (img.width === 0 || img.height === 0) {
+            img.src = githubImageUrl+`${i + 1}.jpg`;    
+      } 
+      
+      if (img.width === 0 || img.height === 0) {
             console.error(`Image not loaded: ${i + 1}.jpg`);
             feedback_msg='Some Image not loaded'
-            feedback_color = "#e74c3c"
-      } else {
-        //img.src = `blob/main/images/${i + 1}.jpg`;
-        //https://github.com/MMatGitHub/gallery/blob/main/images/1.jpg
-        
+            feedback_color = "#e74c3c" 
+      } 
+      else {
         img.classList.add('thumbnail');
         img.addEventListener('click', () => openImage(img.src));
         gallery.appendChild(img);
