@@ -63,7 +63,10 @@
 </head>
 <body>
 
-<div id="gallery"></div>
+<div id="gallery">
+  <img class="thumbnail" src="./images/6.jpg" alt="du" width="600" height="400" onClick="imageVollbild(this.src)">
+  <img class="thumbnail" src="./images/nixda.jpg" alt="nix" onClick="if(this.naturalWidth === 0) { alert('bad'); } else { imageVollbild(this.src); }">
+</div>
 <button id="loadMore">Load Next Images</button>
 <div id="toast"></div>
 
@@ -76,7 +79,9 @@ document.addEventListener("DOMContentLoaded", function() {
   const gallery = document.getElementById('gallery');
   const loadMoreButton = document.getElementById('loadMore');
   const toast = document.getElementById('toast');
+ 
   const githubImageUrl = 'https://raw.githubusercontent.com/mmatgithub/gallery/main/images/';
+
   let startIndex = 0;
   
   function showToast(message, farbe) {
@@ -89,34 +94,22 @@ document.addEventListener("DOMContentLoaded", function() {
     }, 2000);
   }
 
-  // Function to load an image asynchronously
-  async function loadImageAsync(url) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = () => reject(new Error(`Error loading image: ${url}`));
-      img.src = url;
-    });
-  }
-
   function loadImages(startIndex, endIndex) {
     var feedback_msg = 'loaded successfully :-)'
     var feedback_color = '#29b929';
     for (let i = startIndex; i < endIndex; i++) {
       const img = new Image();
       img.src = `./images/${i + 1}.jpg`;
-      console.log(`./images/${i + 1}.jpg`);
-
-     // if (img.width === 0 || img.height === 0) {
-     //     console.log(`Trying to load github raw image: ${i + 1}.jpg`);
-     //     img.src = githubImageUrl+`${i + 1}.jpg`;
-     // }
-      if (img.width === 0 || img.height === 0) {
-        const temp=`Image not loadable: ./images/${i + 1}.jpg`;
-            console.error(temp);
-            feedback_msg=temp;
-            feedback_color = "#e74c3c";
-      } else {
+      if (img.naturalWidth === 0 || img.naturalHeight === 0) {
+          console.error(`Trying to load github raw image: ${i + 1}.jpg`);
+          img.src = githubImageUrl+`${i + 1}.jpg`;
+      }       
+      if (img.naturalWidth === 0 || img.naturalHeight === 0) {
+            console.error(`Image not loaded: ${i + 1}.jpg`);
+            feedback_msg='Some Image not loaded'
+            feedback_color = "#e74c3c" 
+      }
+      else {
         img.classList.add('thumbnail');
         img.addEventListener('click', () => openImage(img.src));
         gallery.appendChild(img);
@@ -132,8 +125,9 @@ document.addEventListener("DOMContentLoaded", function() {
   loadImages(startIndex, startIndex + wieviele);
 
   loadMoreButton.addEventListener('click', function() {
+    startIndex += wieviele;
     let endIndex = startIndex + wieviele;
-    loadImages(startIndex, endIndex);
+    loadImages(startIndex, startIndex + wieviele);
     startIndex = endIndex;
   });
 });
@@ -141,5 +135,3 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </body>
 </html>
-
-
