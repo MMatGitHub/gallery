@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let endIndex = startIndex + wieviele;
     loadImages(startIndex, startIndex + wieviele);
     startIndex = endIndex;
-  });
+  }); 
 });
 </script>
 
